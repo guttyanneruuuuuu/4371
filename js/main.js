@@ -40,6 +40,24 @@ function fmtTime(s) {
   return `${m}:${sec.padStart(4, '0')}`;
 }
 
+// ----- ベストタイム (localStorage) -----
+const BEST_KEY = 'mr3d_best';
+function loadBest() {
+  try { return JSON.parse(localStorage.getItem(BEST_KEY) || '{}'); }
+  catch { return {}; }
+}
+function bestKeyFor() {
+  return `${state.mode}_${state.size}` + (state.mode === MODE.AI ? `_${state.difficulty}` : '');
+}
+function updateBest(time) {
+  const best = loadBest();
+  const k = bestKeyFor();
+  const prev = best[k];
+  const isNew = prev == null || time < prev;
+  if (isNew) { best[k] = time; localStorage.setItem(BEST_KEY, JSON.stringify(best)); }
+  return { isNew, best: best[k] };
+}
+
 function showBanner(text, duration = 1400) {
   banner.textContent = text;
   banner.classList.add('show');
@@ -74,17 +92,21 @@ function onFinish(result) {
   const box = $('result-content');
   let html = '';
   if (result.type === 'solo') {
+    const b = updateBest(result.time);
     html = `
       <div class="res-emoji">🏁</div>
       <h2>クリア！</h2>
       <p class="res-time">${fmtTime(result.time)}</p>
+      ${b.isNew ? '<p class="res-best">🎉 自己ベスト更新！</p>' : `<p class="res-sub">ベスト: ${fmtTime(b.best)}</p>`}
       <p class="res-sub">最短経路: ${result.optimal} マス</p>`;
   } else if (result.type === 'ai') {
     if (result.playerWon) {
+      const b = updateBest(result.time);
       html = `
         <div class="res-emoji">🏆</div>
         <h2 class="win">勝利！</h2>
         <p class="res-time">${fmtTime(result.time)}</p>
+        ${b.isNew ? '<p class="res-best">🎉 自己ベスト更新！</p>' : `<p class="res-sub">ベスト: ${fmtTime(b.best)}</p>`}
         <p class="res-sub">AI(${DIFFICULTY[result.difficulty].label})に勝った！</p>`;
     } else {
       html = `
