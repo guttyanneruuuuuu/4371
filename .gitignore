@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.DS_Store
+.cache/
+dist/
+.vscode/
+*.tmp
+server.log
+supervisord.pid
+supervisor.sock

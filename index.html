@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#05060a" />
+  <title>MAZE RUNNER 3D</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2305060a'/><path d='M4 4h24v4H8v6h12v4H8v6h20v4H4z' fill='%2300ffaa'/></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ================= メニュー ================= -->
+  <section id="screen-menu" class="screen">
+    <div class="menu-inner">
+      <h1 class="title">MAZE<span>RUNNER</span>3D</h1>
+      <p class="subtitle">一人称3D迷路 · 友達対戦 · AI対戦</p>
+
+      <div class="block">
+        <div class="label">モード</div>
+        <div class="btn-grid">
+          <button class="opt" data-mode="solo">🧭<span>ソロ<br>タイムアタック</span></button>
+          <button class="opt" data-mode="ai">🤖<span>AI対戦</span></button>
+          <button class="opt" data-mode="versus">👥<span>友達対戦<br>(交互プレイ)</span></button>
+        </div>
+      </div>
+
+      <div class="block" id="difficulty-row">
+        <div class="label">AI難易度</div>
+        <div class="btn-row">
+          <button class="pill" data-diff="easy">EASY</button>
+          <button class="pill" data-diff="normal">NORMAL</button>
+          <button class="pill" data-diff="hard">HARD</button>
+          <button class="pill" data-diff="insane">INSANE</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="label">迷路サイズ</div>
+        <div class="btn-row">
+          <button class="pill" data-size="6">S</button>
+          <button class="pill" data-size="8">M</button>
+          <button class="pill" data-size="11">L</button>
+          <button class="pill" data-size="15">XL</button>
+        </div>
+      </div>
+
+      <button id="btn-start" class="start-btn">START</button>
+
+      <div class="how">
+        <p>📱 <b>左下スティック</b>=前進・旋回 ／ <b>右側スワイプ</b>=視点</p>
+        <p>💻 PC: WASD / 矢印キー / マウスドラッグ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ゲーム ================= -->
+  <section id="screen-game" class="screen hidden">
+    <canvas id="gl"></canvas>
+    <div id="look-area"></div>
+
+    <!-- HUD -->
+    <div id="hud">
+      <div class="hud-left">
+        <div id="hud-mode" class="chip">AI</div>
+      </div>
+      <div class="hud-center">
+        <div id="hud-time" class="time">0:00.0</div>
+      </div>
+      <div class="hud-right">
+        <div id="hud-goal" class="chip">🎯 0</div>
+        <button id="btn-pause" class="icon-btn">⏸</button>
+        <button id="btn-quit" class="icon-btn">✕</button>
+      </div>
+    </div>
+
+    <canvas id="minimap" width="220" height="220"></canvas>
+
+    <div id="banner"></div>
+
+    <!-- ジョイスティック -->
+    <div id="joy-base">
+      <div id="joy-knob"></div>
+    </div>
+    <div class="joy-hint">移動 / 旋回</div>
+  </section>
+
+  <!-- ================= VERSUS 中間 ================= -->
+  <section id="screen-versus-mid" class="screen hidden overlay">
+    <div class="card">
+      <div class="res-emoji">⏱</div>
+      <h2>プレイヤー1 ゴール！</h2>
+      <p class="res-time" id="vm-p1-time">0:00.0</p>
+      <p class="res-sub">同じ迷路でプレイヤー2が挑戦します。<br>端末を渡してください。</p>
+      <button id="btn-vm-next" class="start-btn">プレイヤー2 スタート</button>
+    </div>
+  </section>
+
+  <!-- ================= 結果 ================= -->
+  <section id="screen-result" class="screen hidden overlay">
+    <div class="card">
+      <div id="result-content"></div>
+      <div class="result-btns">
+        <button id="btn-retry" class="start-btn">もう一度</button>
+        <button id="btn-menu" class="ghost-btn">メニュー</button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
